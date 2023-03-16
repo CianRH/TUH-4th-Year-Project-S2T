@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Recording Website</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+
+<body>
+    <div id="nav">
+        <ul>
+            <li><a href="recording.html">Record</a></li>
+            <li><a href="view.html">View</a></li>
+        </ul>
+    </div>
+    <!--
+    <h1>View Transcribed Files:</h1>
+    <button id="list-files">List all files</button>
+    <ul id="list"></ul>
+
+    <div id="file-content">
+        <p id="paragraph">
+            <i>Content of transcription file will appear here when clicked</i>
+        </p>
+    </div>
+    !-->
+    <h1>Create a new recording here:</h1>
+    <button id="start-recording-button">Start Recording</button>
+    <button id="pause-recording-button" disabled>Pause Recording</button>
+    <button id="resume-recording-button" disabled>Resume Recording</button>
+    <button id="stop-recording-button" disabled>Stop Recording</button>
+    <button id="download-recording-button" disabled>Upload Recording to S3</button>
+    <!--
+    <h2>Upload recording here:</h2>
+    <form method="post" action="/save-image" enctype="multipart/form-data">
+        <input type="file" name="audio" />
+        <button>Submit</button>
+
+    <h2>Transcribed files</h2>
+    <button id="display-files-button">Display Files</button>
+    
+   </form method="post" action="/save-image" enctype="multipart/form-data">
+    --><img />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
