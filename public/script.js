@@ -36,11 +36,11 @@ let form = document.querySelector("#my-form");
 
 //listButton.addEventListener("click", function () {
 //   // const s3 = new aws.S3({
-//   //     accessKeyId: "AKIA425RLEZQXLROIKEV",
-//   //     secretAccessKey: "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",
+//   //     accessKeyId: ,
+//   //     secretAccessKey: ,
 //   // });
 //   // var params = {
-//   //     Bucket: 'tuh-transcription-s2t-1.0', /* required */
+//   //     Bucket: 
 //   //     Prefix: 'output/'  // Can be your folder name
 //   //   };
 //   //   s3.listObjectsV2(params, function(err, data) {

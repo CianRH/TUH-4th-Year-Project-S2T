@@ -10,21 +10,56 @@ const flash = require("express-flash");
 const session = require("express-session");
 const methodOverride = require("method-override")
 
+//MongoDB
+const mongoose = require("mongoose");
+mongoose.connect(process.env.DATABASE_URL, { 
+useNewURLParser: true })
+const db = mongoose.connection
+db.on('error', error => console.error(error))
+db.once('open', () => console.log('Connection to Mongoose'))
+
+const registerSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  }
+})
+
+//MongoDB END
+const User = mongoose.model('User', registerSchema)
+module.exports = { User };
+// Working with local array
 const initializePassport = require('./passport-config.js')
+//initializePassport(
+//  passport,
+//  email => users.find(user => user.email === email),
+//  id => users.find(user => user.id === id)
+//)
+
 initializePassport(
   passport,
-  email => users.find(user => user.email === email),
-  id => users.find(user => user.id === id)
-)
+  email => User.findOne({ email: email }),
+  id => User.findById(id)
+);
 
 const s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_KEY,
 })
 
-const users = [
-
-]
+//const users = []
 
 // EJS 
 app.set('view-engine', 'ejs')
@@ -44,7 +79,7 @@ app.get('/', checkAuthenticated, (req,res) =>{
 })
 
 app.get('/view', checkAuthenticated, (req,res) =>{
-  res.render('view.ejs', { name: req.user.name })
+  res.render('view.ejs', { name: req.user.name, audiourl: key })
 })
 
 app.get('/login', checkNotAuthenticated, (req,res) =>{
@@ -64,15 +99,26 @@ app.get('/register', checkNotAuthenticated, (req,res) =>{
 app.post('/register', checkNotAuthenticated , async (req,res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
-    users.push({
+    const user = new User({
       id: Date.now().toString(),
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword
     })
+
+    const newUser = await user.save()
+
+    //const hashedPassword = await bcrypt.hash(req.body.password, 10)
+    //users.push({
+    //  id: Date.now().toString(),
+    //  name: req.body.name,
+    //  email: req.body.email,
+    //  password: hashedPassword
+    //})
     res.redirect('/login')
   } catch {
     res.redirect('/register')
+    console.log('didnt work')
   }
 })
 
@@ -119,7 +165,7 @@ app.post("/save-image", upload.single("audio"), (req, res) => {
 
 app.get("/list-bucket", (req, res) => {
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME2,
+    Bucket: process.env.AWS_BUCKET_NAME_OUTPUT,
     Prefix: "output/",
   };
   s3.listObjectsV2(params, function (err, data) {
@@ -137,10 +183,11 @@ app.get("/list-bucket", (req, res) => {
   });
 });
 
+let key = 'test';
 app.get("/get-file-content", (req, res) => {
   const key = req.query.key;
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME2,
+    Bucket: process.env.AWS_BUCKET_NAME_OUTPUT,
     Key: `output/${key}`
   };
   s3.getObject(params, function (err, data) {
@@ -152,6 +199,7 @@ app.get("/get-file-content", (req, res) => {
     }
   });
 });
+
 
 app.use(express.static("public"));
 
