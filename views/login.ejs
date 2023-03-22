@@ -26,18 +26,19 @@
     <button id="resume-recording-button" disabled>Resume Recording</button>
     <button id="stop-recording-button" disabled>Stop Recording</button>
     <button id="download-recording-button" disabled>Upload Recording to S3</button>
-    -->
-    <h1>Login here:</h1>
+    
+    <h1>Login here:</h1>-->
     <div id="sign-in-form-div">
         <form action="/login" method="POST" id="my-form">
+            <h1>Login here:</h1>
 
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <input placeholder="test@hospital.ie" type="email" id="email" name="email" required>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input placeholder="xxxxx" type="password" id="password" name="password" required>
 
-            <button type="submit">Login</button>
+            <button id="loginbutton" type="submit">Login</button>
         </form>
     </div>
     <!--

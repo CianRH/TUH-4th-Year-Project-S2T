@@ -78,35 +78,36 @@ let form = document.querySelector("#my-form");
 if (listButton) {
     listButton.addEventListener("click", function () {
         fetch("/list-bucket")
-          .then((response) => response.json())
-          .then((data) => {
-            let list = document.querySelector("#list");
-            list.innerHTML = "";
-            data.forEach((file) => {
-              if (file && file.key && file.url) { // skip incomplete key values
-                let listItem = document.createElement("li");
-                let link = document.createElement("a");
-                link.textContent = file.key;
-                link.href = file.url;
-                link.download = file.key;
-      
-                link.addEventListener("click", function (event) {
-                  event.preventDefault();
-                  fetch(`/get-file-content?key=${encodeURIComponent(file.key)}`)
-                    .then((response) => response.text())
-                    .then((content) => {
-                      let paragraph = document.querySelector("#paragraph");
-                      paragraph.textContent = content;
-                    })
-                    .catch((error) => console.log(error));
+            .then((response) => response.json())
+            .then((data) => {
+                let list = document.querySelector("#list");
+                list.innerHTML = "";
+                data.forEach((file) => {
+                    if (file && file.key && file.url) { // skip incomplete key values
+                        let listItem = document.createElement("li");
+                        let link = document.createElement("a");
+                        link.textContent = file.key;
+                        link.href = file.url;
+                        link.download = file.key;
+
+                        link.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            fetch(`/get-file-content?key=${encodeURIComponent(file.key)}`)
+                                .then((response) => response.text())
+                                .then((content) => {
+                                    let paragraph = document.querySelector("#paragraph");
+                                    paragraph.textContent = content;
+                                })
+                                .catch((error) => console.log(error));
+                        });
+
+
+                        listItem.appendChild(link);
+                        list.appendChild(listItem);
+                    }
                 });
-      
-                listItem.appendChild(link);
-                list.appendChild(listItem);
-              }
-            });
-          })
-          .catch((error) => console.log(error));
+            })
+            .catch((error) => console.log(error));
     });
 }
 
@@ -153,10 +154,10 @@ stopButton.addEventListener("click", function () {
     resumeButton.setAttribute("disabled", true);
 });
 
-downloadButton.addEventListener("click", function() {
+downloadButton.addEventListener("click", function () {
     const blob = new Blob(recordedBlobs, { type: "audio/webm" });
 
-   const formData = new FormData();
+    const formData = new FormData();
     // this is whats being sent
     formData.append("audio", blob, "recording.webm");
 
@@ -168,7 +169,7 @@ downloadButton.addEventListener("click", function() {
 
     downloadButton.setAttribute("disabled", true);
 
-   recordedBlobs = [];
+    recordedBlobs = [];
     //window.location.href = 'index.html';
 });
 
@@ -181,7 +182,7 @@ downloadButton.addEventListener("click", function() {
 //
 //    axios.post("/save-image", formData).then(response => {
 //        console.log("The recording has been saved to S3 at:", response.data);
- //   }).catch(error => {
+//   }).catch(error => {
 //        console.error("An error occurred while saving the recording to S3:", error);
 //    });
 //
@@ -226,37 +227,37 @@ downloadButton.addEventListener("click", function() {
 //    }
 //}, false);
 //
-document.onkeydown = function(e) {
+document.onkeydown = function (e) {
     var key_press = e.key;
     var key_code = key_press.charCodeAt(0);
 
     console.log(key_press, key_code)
     if (key_code == "112") {
-        if (recordButton.hasAttribute('disabled')){
+        if (recordButton.hasAttribute('disabled')) {
             stopButton.click();
             console.log(`Stopped\r\nKey Code value: ${key_code}`);
-        }else {
+        } else {
             console.log(`Started\r\nKey Code value: ${key_code}`);
             recordButton.click();
         }
     }
 
     if (key_code == "114") {
-        if (recordButton.hasAttribute('disabled') && pauseButton.hasAttribute('disabled')){
+        if (recordButton.hasAttribute('disabled') && pauseButton.hasAttribute('disabled')) {
             resumeButton.click();
             console.log(`Resumed\r\nKey Code value: ${key_code}`);
-        }else{
+        } else {
             pauseButton.click();
             console.log(`Paused\r\nKey Code value: ${key_code}`);
         }
     }
 
     if (key_code == "117") {
-        if (downloadButton.hasAttribute('disabled')){
+        if (downloadButton.hasAttribute('disabled')) {
             console.log(`Upload not available`);
-        }else{
+        } else {
             downloadButton.click();
             console.log(`Uploaded to s3\r\nKey Code value: ${key_code}`)
         }
     }
-  }
+}

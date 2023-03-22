@@ -27,10 +27,13 @@
         </p>
     </div>
     <div>
-        <audio src= '<%= audiourl %>' controls> </audio>
+        <audio controls> <source src="" type="audio/webm"> </audio>
     </div>
 
-    <h2 id="name-h2">Logged in as <%= name %></h2>
+    <form action="/logout?_method=DELETE" method="POST">
+        <h2 id="name-h2">Logged in as <%= name %></h2>
+        <button type="submit">Log Out</button>
+    </form>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
     <script src="script.js"></script>

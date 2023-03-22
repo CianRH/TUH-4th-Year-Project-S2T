@@ -12,8 +12,9 @@ const methodOverride = require("method-override")
 
 //MongoDB
 const mongoose = require("mongoose");
-mongoose.connect(process.env.DATABASE_URL, { 
-useNewURLParser: true })
+mongoose.connect(process.env.DATABASE_URL, {
+  useNewURLParser: true
+})
 const db = mongoose.connection
 db.on('error', error => console.error(error))
 db.once('open', () => console.log('Connection to Mongoose'))
@@ -61,9 +62,9 @@ const s3 = new aws.S3({
 
 //const users = []
 
-// EJS 
+// EJS setup
 app.set('view-engine', 'ejs')
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -74,15 +75,15 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
 
-app.get('/', checkAuthenticated, (req,res) =>{
+app.get('/', checkAuthenticated, (req, res) => {
   res.render('index.ejs', { name: req.user.name })
 })
 
-app.get('/view', checkAuthenticated, (req,res) =>{
+app.get('/view', checkAuthenticated, (req, res) => {
   res.render('view.ejs', { name: req.user.name, audiourl: key })
 })
 
-app.get('/login', checkNotAuthenticated, (req,res) =>{
+app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login.ejs')
 })
 
@@ -92,11 +93,11 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
   failureFlash: true
 }))
 
-app.get('/register', checkNotAuthenticated, (req,res) =>{
+app.get('/register', checkNotAuthenticated, (req, res) => {
   res.render('register.ejs')
 })
 
-app.post('/register', checkNotAuthenticated , async (req,res) => {
+app.post('/register', checkNotAuthenticated, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     const user = new User({
@@ -108,6 +109,8 @@ app.post('/register', checkNotAuthenticated , async (req,res) => {
 
     const newUser = await user.save()
 
+    // user in memory
+
     //const hashedPassword = await bcrypt.hash(req.body.password, 10)
     //users.push({
     //  id: Date.now().toString(),
@@ -118,19 +121,19 @@ app.post('/register', checkNotAuthenticated , async (req,res) => {
     res.redirect('/login')
   } catch {
     res.redirect('/register')
-    console.log('didnt work')
+    console.log('registration didnt work')
   }
 })
 
 function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()){
+  if (req.isAuthenticated()) {
     return next()
   }
 
   res.redirect('/login')
 }
 
-function checkNotAuthenticated(req,res,next) {
+function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return res.redirect('/')
   }
@@ -199,6 +202,25 @@ app.get("/get-file-content", (req, res) => {
     }
   });
 });
+
+app.get("/get-audio", (req, res) => {
+  const key = req.query.key.replace(".txt", "");
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME_AUDIO,
+    Key: `${key}`,
+  };
+  s3.getObject(params, function (err, data) {
+    if (err) {
+      console.log(err, err.stack);
+      res.status(500).send("An error occurred while getting file contents.");
+    } else {
+      res.set('Content-Type', 'audio/webm');
+      res.send(data.Body);
+    }
+  });
+});
+
+
 
 
 app.use(express.static("public"));
