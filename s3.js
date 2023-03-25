@@ -239,7 +239,7 @@ app.get("/search-bucket", (req, res) => {
 app.get("/get-audio", (req, res) => {
   const key = req.query.key.replace(".txt", "");
   const params = {
-    Bucket: process.env.AWS_BUCKET_NAME_AUDIO,
+    Bucket: process.env.AWS_BUCKET_NAME,
     Key: `${key}`,
   };
   s3.getObject(params, function (err, data) {

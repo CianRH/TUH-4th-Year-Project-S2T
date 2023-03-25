@@ -77,10 +77,19 @@ if (listButton) {
                                 .then((content) => {
                                     let paragraph = document.querySelector("#paragraph");
                                     paragraph.textContent = content;
+
+                                    // Fetch and set the audio source
+                                    fetch(`/get-audio?key=${encodeURIComponent(file.key.replace('.txt', ''))}`)
+                                        .then((response) => response.blob())
+                                        .then((blob) => {
+                                            let audioURL = URL.createObjectURL(blob);
+                                            let audioPlayer = document.getElementById("audio-player");
+                                            audioPlayer.src = audioURL;
+                                        })
+                                        .catch((error) => console.log(error));
                                 })
                                 .catch((error) => console.log(error));
                         });
-
 
                         listItem.appendChild(link);
                         list.appendChild(listItem);
