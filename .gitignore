@@ -109,3 +109,4 @@ dist
 .env
 node_modules
 s3 - Copy.js
+cert2

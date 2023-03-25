@@ -9,6 +9,14 @@ const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
 const methodOverride = require("method-override")
+const fs = require('fs')
+const https = require('https')
+
+
+//https verification
+const key = fs.readFileSync('cert2/private.key')
+const cert = fs.readFileSync('cert2/certificate.crt')
+
 
 //MongoDB
 const mongoose = require("mongoose");
@@ -48,6 +56,7 @@ const initializePassport = require('./passport-config.js')
 //  email => users.find(user => user.email === email),
 //  id => users.find(user => user.id === id)
 //)
+
 
 initializePassport(
   passport,
@@ -186,7 +195,6 @@ app.get("/list-bucket", (req, res) => {
   });
 });
 
-let key = 'test';
 app.get("/get-file-content", (req, res) => {
   const key = req.query.key;
   const params = {
@@ -203,6 +211,31 @@ app.get("/get-file-content", (req, res) => {
   });
 });
 
+app.get("/search-bucket", (req, res) => {
+  const keyword = req.query.keyword;
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME_OUTPUT,
+    Prefix: "output/",
+  };
+  s3.listObjectsV2(params, function (err, data) {
+    if (err) {
+      console.log(err, err.stack);
+      res.status(500).send("An error occurred  searching files.");
+    } else {
+      const files = data.Contents.filter((object) => {
+        const key = object.Key.replace("output/", "");
+        return key.includes(keyword);
+      }).map((object) => {
+        const key = object.Key.replace("output/", "");
+        const url = s3.getSignedUrl('getObject', { Bucket: params.Bucket, Key: object.Key });
+        return { key, url };
+      });
+      res.json(files);
+    }
+  });
+});
+
+
 app.get("/get-audio", (req, res) => {
   const key = req.query.key.replace(".txt", "");
   const params = {
@@ -212,7 +245,7 @@ app.get("/get-audio", (req, res) => {
   s3.getObject(params, function (err, data) {
     if (err) {
       console.log(err, err.stack);
-      res.status(500).send("An error occurred while getting file contents.");
+      res.status(500).send("An error occurred while getting audio.");
     } else {
       res.set('Content-Type', 'audio/webm');
       res.send(data.Body);
@@ -220,7 +253,15 @@ app.get("/get-audio", (req, res) => {
   });
 });
 
+const cred = {
+	key,
+	cert
+}
 
+
+const httpsServer = https.createServer(cred, app)
+
+httpsServer.listen(8443)
 
 
 app.use(express.static("public"));

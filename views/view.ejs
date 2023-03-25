@@ -15,10 +15,14 @@
         <ul>
             <li><a href="/">Record</a></li>
             <li><a href="/view">View</a></li>
-          </ul>
+        </ul>
     </div>
     <h1>View Transcribed Files:</h1>
     <button id="list-files">List all files</button>
+    <div id="search-div">
+        <input type="text" id="search-input" placeholder="Search keyword" />
+        <button id="search-button">Search</button>
+    </div>
     <ul id="list"></ul>
 
     <div id="file-content">
@@ -27,11 +31,14 @@
         </p>
     </div>
     <div>
-        <audio controls> <source src="" type="audio/webm"> </audio>
+        <audio controls>
+            <source src="" type="audio/webm">
+        </audio>
     </div>
 
     <form action="/logout?_method=DELETE" method="POST">
-        <h2 id="name-h2">Logged in as <%= name %></h2>
+        <h2 id="name-h2">Logged in as <%= name %>
+        </h2>
         <button type="submit">Log Out</button>
     </form>
 
