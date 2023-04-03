@@ -186,6 +186,11 @@ button {
 
 }
 
+#recording-deleted {
+    font-weight: bolder;
+    margin-top: 10px;
+}
+
 #start-recording-button,
 #stop-recording-button,
 #download-recording-button,
@@ -197,7 +202,10 @@ button {
 
 
 #pause-recording-button,
-#resume-recording-button {
+#download-recording-button,
+#resume-recording-button,
+#stop-recording-button,
+#delete-button {
     display: none;
 }
 

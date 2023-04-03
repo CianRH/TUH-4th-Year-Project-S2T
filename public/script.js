@@ -160,6 +160,7 @@ if(recordButton){
             stopButton.removeAttribute("disabled");
             document.getElementById("recording-deleted").innerHTML = ""
             pauseButton.style.display = "inline-block";
+            stopButton.style.display = "inline-block";
             downloadButton.setAttribute("disabled", true);
             deleteButton.setAttribute("disabled", true);
     
@@ -206,6 +207,10 @@ stopButton.addEventListener("click", function () {
     deleteButton.removeAttribute("disabled");
     pauseButton.style.display = "none";
     resumeButton.style.display = "none";
+    recordButton.style.display = "none";
+    stopButton.style.display = "none";
+    deleteButton.style.display = "inline-block";
+    downloadButton.style.display = "inline-block";
 });
 }
 
@@ -214,6 +219,11 @@ if(deleteButton){
         recordedBlobs = [];
         deleteButton.setAttribute("disabled", true);
         downloadButton.setAttribute("disabled", true);
+        recordButton.style.display = "inline-block";
+        stopButton.style.display = "none";
+        deleteButton.style.display = "none";
+        downloadButton.style.display = "none";
+
         document.getElementById("recording-deleted").innerHTML = "Recording Deleted"
         
     })
@@ -235,6 +245,13 @@ downloadButton.addEventListener("click", function () {
 
     downloadButton.setAttribute("disabled", true);
     deleteButton.setAttribute("disabled", true);
+    recordButton.style.display = "inline-block";
+    stopButton.style.display = "none";
+    deleteButton.style.display = "none";
+    downloadButton.style.display = "none";
+    stopButton.style.display = "none";
+
+    document.getElementById("recording-deleted").innerHTML = "Recording Uploaded"
 
     recordedBlobs = [];
     //window.location.href = 'index.html';
