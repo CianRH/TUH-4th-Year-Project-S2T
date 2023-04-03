@@ -11,6 +11,10 @@ const session = require("express-session");
 const methodOverride = require("method-override")
 const fs = require('fs')
 const https = require('https')
+const favicon = require('serve-favicon')
+
+//favicon
+app.use(favicon(__dirname + '/views/images/TU_Dublin_Logo.png'))
 
 
 //https verification
@@ -164,14 +168,17 @@ const upload = multer({
     bucket: process.env.AWS_BUCKET_NAME,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: function (req, file, cb) {
+      const currentDate = new Date()
+      const newDate = `${currentDate.getDate()}_${currentDate.getMonth() + 1}_${currentDate.getFullYear()}`
+      const newTime = `${currentDate.getHours()}_${currentDate.getMinutes()}_${currentDate.getSeconds()}`
       //cb(null, `${sessionStorage.getItem("nameOutput")}-${sessionStorage.getItem("numOutput")}-${Date.now().toString()}`)
-      cb(null, `${req.user.name}-${Date.now()}`)
+      cb(null, `${req.user.name}-${newDate}_${newTime}`)
     }
     // ,acl: "public-read",
   })
 })
 
-app.post("/save-image", upload.single("audio"), (req, res) => {
+app.post("/save-image", checkAuthenticated, upload.single("audio"), (req, res) => {
   res.redirect(req.file.location);
 })
 
@@ -212,7 +219,7 @@ app.get("/get-file-content", (req, res) => {
 });
 
 app.get("/search-bucket", (req, res) => {
-  const keyword = req.query.keyword;
+  const keyword = req.query.keyword.toLowerCase();
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME_OUTPUT,
     Prefix: "output/",
@@ -223,7 +230,7 @@ app.get("/search-bucket", (req, res) => {
       res.status(500).send("An error occurred  searching files.");
     } else {
       const files = data.Contents.filter((object) => {
-        const key = object.Key.replace("output/", "");
+        const key = object.Key.replace("output/", "").toLowerCase();
         return key.includes(keyword);
       }).map((object) => {
         const key = object.Key.replace("output/", "");
@@ -252,6 +259,7 @@ app.get("/get-audio", (req, res) => {
     }
   });
 });
+
 
 const cred = {
 	key,

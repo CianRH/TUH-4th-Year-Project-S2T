@@ -104,6 +104,53 @@ a:hover {
     text-decoration: underline;
 }
 
+#table-list {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    font-family: Arial;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+#table-list thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+#table-list th,
+#table-list td {
+    padding: 12px 15px;
+}
+
+#table-list tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+#table-list tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+#table-list tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+#table-list tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+
+#table-list thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
 button {
     align-items: center;
     appearance: none;
@@ -143,14 +190,22 @@ button {
 #stop-recording-button,
 #download-recording-button,
 #pause-recording-button,
-#resume-recording-button {
+#resume-recording-button,
+#delete-button {
     background-color: lightblue;
+}
+
+
+#pause-recording-button,
+#resume-recording-button {
+    display: none;
 }
 
 #stop-recording-button[disabled],
 #download-recording-button[disabled],
 #pause-recording-button[disabled],
-#resume-recording-button[disabled] {
+#resume-recording-button[disabled],
+#delete-button[disabled] {
     background-color: gray;
     cursor: default;
 }

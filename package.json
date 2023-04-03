@@ -24,7 +24,8 @@
     "multer-s3": "^2.10.0",
     "nodemon": "^2.0.2",
     "passport": "^0.6.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "serve-favicon": "^2.5.0"
   },
   "author": "",
   "description": ""

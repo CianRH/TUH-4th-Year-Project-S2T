@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Recording Website</title>
+    <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALRrDf+0awv/tWsK/7RrDf/69O2HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC1awn/tGoH/7RqCf+0awz/+vTthwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAtGsM/7RrDf+0aw3/tGsM//r07YcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/Pr3wvz59sr8+fbK/Pn2yrRrDP+0awz/tWsK/7VrCf/37+b//Pn2yv359cr8+fbKAAAAAAAAAAAAAAAAAAAAAMSIPPe1awn/tGsM/7RrDf+0aw3/tGsN/7RrDf+/gCv/tGsL/7RrDP+0aw3//fr3KAAAAAAAAAAAAAAAAAAAAAC6dBn38ubWzbRrDf+0awr/tWsK/7RrDf/KllH/tGsN/+TJpoK0awz/5cupzbVrCf8AAAAA/v7+aAAAAAAAAAAAunQa97RqCP+1awn/4sah9LVrCv+0agj/tWsK/7VrCf+0agf/9OncnbRrDf+1awn/AAAAAAAAAAAAAAAAAAAAALl0HPe1awr/tGoK/7RrDf/16tz/tWsK/7RrDP+0awz/tWsK/7RrC/+1awn/tWsJ/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAtGsN/8qWUf+1awn/tGsL//r174cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALRrDf+0aw3/tGsM/7RqCP/69O2HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC0awz/tGsN/7RrDf+0awz/+vTthwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAtGoI/7RrDf+0aw3/tWsK//r07YcAAAAAAAAAAAAAAAAAAAAA9vb2aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD8HwAA/B8AAPwfAADAAwAAwAcAAMADAADAAwAAwAMAAPwfAAD8HwAA/B8AAPwfAAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="styles.css">
 
 </head>
@@ -18,12 +19,22 @@
         </ul>
     </div>
     <h1>View Transcribed Files:</h1>
-    <button id="list-files">List all files</button>
+    <!--<button id="list-files">List all files</button> -->
     <div id="search-div">
         <input type="text" id="search-input" placeholder="Search keyword" />
         <button id="search-button">Search</button>
     </div>
     <ul id="list"></ul>
+    <table id="table-list" border="1">
+        <thead>
+            <tr>
+                <th>File Name</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
 
     <div id="file-content">
         <p id="paragraph">
