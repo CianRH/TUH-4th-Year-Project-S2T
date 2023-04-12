@@ -9,6 +9,7 @@ let listButton = document.querySelector("#list-files");
 let searchButton = document.querySelector("#search-button");
 let searchInput = document.querySelector("#search-input");
 let deleteButton = document.querySelector("#delete-button");
+let saveButton = document.getElementById("save-button");
 
 let formName;
 let number;
@@ -19,6 +20,11 @@ let form = document.querySelector("#my-form");
 if (searchButton){
     searchButton.addEventListener("click", function () {
         const keyword = searchInput.value.trim().toLowerCase();
+
+        let textEditor = document.querySelector("#text-editor");
+        textEditor.value = "Content of transcription file will appear here when clicked";
+        
+
         if (keyword.length > 0) {
           fetch(`/search-bucket?keyword=${encodeURIComponent(keyword)}`)
             .then((response) => response.json())
@@ -28,22 +34,32 @@ if (searchButton){
                 data.forEach((file) => {
                   if (file && file.key && file.url) {
                     let listItem = document.createElement("tr");
+                    listItem.setAttribute("data-key", file.key);
                     let cell = document.createElement("td");
                     let link = document.createElement("a");
                     link.textContent = file.key;
                     link.href = file.url;
                     link.download = file.key;
-              
+                    
                     link.addEventListener("click", function (event) {
-                      event.preventDefault();
-                      fetch(`/get-file-content?key=${encodeURIComponent(file.key)}`)
-                        .then((response) => response.text())
-                        .then((content) => {
-                          let paragraph = document.querySelector("#paragraph");
-                          paragraph.textContent = content;
-                        })
-                        .catch((error) => console.log(error));
-                    });
+                        event.preventDefault();
+                        const previousActiveRow = document.querySelector("#table-list tbody tr.active");
+                        if (previousActiveRow) {
+                            previousActiveRow.classList.remove("active");
+                        }
+                        
+                        listItem.classList.add("active");
+                        fetch(`/get-file-content?key=${encodeURIComponent(file.key)}`)
+                          .then((response) => response.text())
+                          .then((content) => {
+                            let textEditor = document.querySelector("#text-editor")
+                            textEditor.value = content
+                            textEditor.removeAttribute("readonly")
+
+                            saveButton.removeAttribute("disabled")
+                          })
+                          .catch((error) => console.log(error));
+                     });
               
                     cell.appendChild(link);
                     listItem.appendChild(cell);
@@ -62,6 +78,7 @@ if (searchButton){
                 data.forEach((file) => {
                   if (file && file.key && file.url) {
                     let listItem = document.createElement("tr");
+                    listItem.setAttribute("data-key", file.key);
                     let cell = document.createElement("td");
                     let link = document.createElement("a");
                     link.textContent = file.key;
@@ -69,12 +86,22 @@ if (searchButton){
                     link.download = file.key;
               
                     link.addEventListener("click", function (event) {
-                      event.preventDefault();
-                      fetch(`/get-file-content?key=${encodeURIComponent(file.key)}`)
-                        .then((response) => response.text())
-                        .then((content) => {
-                          let paragraph = document.querySelector("#paragraph");
-                          paragraph.textContent = content;
+                        event.preventDefault();
+                        const previousActiveRow = document.querySelector("#table-list tbody tr.active");
+                        if (previousActiveRow) {
+                            previousActiveRow.classList.remove("active");
+                        }    
+                      
+                        listItem.classList.add("active");
+
+                        fetch(`/get-file-content?key=${encodeURIComponent(file.key)}`)
+                          .then((response) => response.text())
+                          .then((content) => {
+                            let textEditor = document.querySelector("#text-editor");
+                            textEditor.value = content;
+                            textEditor.removeAttribute("readonly");
+
+                            saveButton.removeAttribute("disabled")
 
                                     // Fetch and set the audio source
                                     fetch(`/get-audio?key=${encodeURIComponent(file.key.replace('.txt', ''))}`)
@@ -99,56 +126,39 @@ if (searchButton){
       });
 }
 
-// List Button functionality added to search
-//if (listButton) {
-//    listButton.addEventListener("click", function () {
-//        fetch("/list-bucket")
-//            .then((response) => response.json())
-//            .then((data) => {
-//                let list = document.querySelector("#table-list");
-//                list.innerHTML = "";
-//                data.forEach((file) => {
-//                    
-//                    if (file && file.key && file.url) {
-//                        let tablerow = document.createElement("tr");
-//                        let cell= document.createElement("td");
-//                        let link = document.createElement("a");
-//                        link.textContent = file.key;
-//                        link.href = file.url;
-//                        link.download = file.key;
-//
-//                        link.addEventListener("click", function (event) {
-//                            event.preventDefault();
-//                            fetch(`/get-file-content?key=${encodeURIComponent(file.key)}`)
-//                                .then((response) => response.text())
-//                                .then((content) => {
-//                                    let paragraph = document.querySelector("#paragraph");
-//                                    paragraph.textContent = content;
-//
-//                                    // Fetch and set the audio source
-//                                    fetch(`/get-audio?key=${encodeURIComponent(file.key.replace('.txt', ''))}`)
-//                                        .then((response) => response.blob())
-//                                        .then((blob) => {
-//                                            let audioURL = URL.createObjectURL(blob);
-//                                            let audioPlayer = document.getElementById("audio-player");
-//                                            audioPlayer.src = audioURL;
-//                                        })
-//                                        .catch((error) => console.log(error));
-//                                })
-//                                .catch((error) => console.log(error));
-//                        });
-//
-//                        cell.appendChild(link);
-//                        tablerow.appendChild(cell);
-//                        list.appendChild(tablerow);
-//                    }
-//                });
-//        })
-//            .catch((error) => console.log(error));
-//    });
-//}
+if (saveButton) {
+    saveButton.addEventListener("click", function () {
+      const currentFile = document.querySelector("#table-list tbody tr.active");
+      
+      if (currentFile) {
+        const key = currentFile.getAttribute("data-key");
+        const editedContent = document.getElementById("text-editor").value;
 
+        console.log("Sending edited content:", editedContent);
 
+  
+        fetch(`/save-edited-content`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `key=${encodeURIComponent(key)}&content=${encodeURIComponent(editedContent)}`,
+          })
+          .then((response) => {
+            if (response.ok) {
+                alert("Transcription saved successfully!")
+
+                saveButton.setAttribute("disabled")
+            } else {
+                alert("Error saving the updated transcription.")
+            }
+          })
+          .catch((error) => console.log(error));
+        }else {
+            alert("No active transcription file is selected, please select one in the table above");
+        }
+    });
+  }
 
 if(recordButton){
     recordButton.addEventListener("click", function () {

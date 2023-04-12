@@ -260,6 +260,29 @@ app.get("/get-audio", (req, res) => {
   });
 });
 
+app.post("/save-edited-content", express.urlencoded({ extended: true }), (req, res) => {
+  const key = req.body.key;
+  const content = req.body.content;
+
+  console.log("Received: " ,key, content)
+
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME_OUTPUT,
+    Key: `output/${key}`,
+    Body: content,
+  };
+
+  s3.putObject(params, function (err, data) {
+    if (err) {
+      console.log(err, err.stack);
+      res.status(500).send("An error occurred while saving the edited transcription.");
+    } else {
+      res.sendStatus(200);
+    }
+  });
+});
+
+
 
 const cred = {
 	key,
