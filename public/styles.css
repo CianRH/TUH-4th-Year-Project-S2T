@@ -2,6 +2,7 @@ body {
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
     background-color: #ececec;
+
 }
 
 body {
@@ -330,7 +331,6 @@ button[type="submit"]:hover {
 }
 
 /*Nav Bar*/
-
 #nav li {
     float: left;
 }
@@ -356,10 +356,54 @@ button[type="submit"]:hover {
     background-color: #111;
 }
 
-#search-input{
+#name-nav {
+    float: left;
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+/* Footer */
+#footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 10px;
+    padding-right: 20px;
+}
+
+#footer form button {
+    margin-top: -40px;
+    margin-bottom: 10px;
+}
+
+#search-input {
     width: 200px;
 }
 
-#search-div {
+#search-div {}
 
+/* Logout Button */
+#logout-button-container {
+    margin-top: 200px;
+}
+
+/* Audio Player */
+#audio-player {
+    width: 50%;
+    background-color: #f5f5f5;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+audio {
+    width: 100%;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    background-color: transparent;
 }
