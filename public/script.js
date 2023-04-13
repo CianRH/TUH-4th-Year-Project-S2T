@@ -10,6 +10,7 @@ let searchButton = document.querySelector("#search-button");
 let searchInput = document.querySelector("#search-input");
 let deleteButton = document.querySelector("#delete-button");
 let saveButton = document.getElementById("save-button");
+let urgentCheckbox = document.getElementById("urgencyCheckbox");
 
 let formName;
 let number;
@@ -23,7 +24,7 @@ if (searchButton){
 
         let textEditor = document.querySelector("#text-editor");
         textEditor.value = "Content of transcription file will appear here when clicked";
-        
+    
 
         if (keyword.length > 0) {
           fetch(`/search-bucket?keyword=${encodeURIComponent(keyword)}`)
@@ -235,6 +236,8 @@ if(deleteButton){
         downloadButton.style.display = "none";
 
         document.getElementById("recording-deleted").innerHTML = "Recording Deleted"
+
+        urgencyCheckbox.checked = false;
         
     })
 }
@@ -243,9 +246,11 @@ if(downloadButton){
 downloadButton.addEventListener("click", function () {
     const blob = new Blob(recordedBlobs, { type: "audio/webm" });
 
+    const urgentPrefix = urgencyCheckbox.checked ? "URGENT_" : "";
+
     const formData = new FormData();
     // this is whats being sent
-    formData.append("audio", blob, "recording.webm");
+    formData.append("audio", blob, urgentPrefix + "recording.webm");
 
     axios.post("/save-image", formData).then(response => {
         console.log("The recording has been saved to S3 at:", response.data);
@@ -262,6 +267,8 @@ downloadButton.addEventListener("click", function () {
     stopButton.style.display = "none";
 
     document.getElementById("recording-deleted").innerHTML = "Recording Uploaded"
+
+    urgencyCheckbox.checked = false;
 
     recordedBlobs = [];
     //window.location.href = 'index.html';

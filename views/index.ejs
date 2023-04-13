@@ -24,17 +24,7 @@
                         <li><a href="/view">View</a></li>
                     </ul>
                 </div>
-                <!--
-    <h1>View Transcribed Files:</h1>
-    <button id="list-files">List all files</button>
-    <ul id="list"></ul>
 
-    <div id="file-content">
-        <p id="paragraph">
-            <i>Content of transcription file will appear here when clicked</i>
-        </p>
-    </div>
-    !-->
                 <h1>Create a new recording here:</h1>
                 <div id="mainrecording">
                     <button id="start-recording-button">Start Recording</button>
@@ -49,22 +39,18 @@
                     <p id="recording-deleted"></p>
                 </div>
 
+                <div id="urgency">
+                    <label for="urgencyCheckbox">Mark Transcription as <b>URGENT</b>: </label>
+                    <input type="checkbox" id="urgencyCheckbox">
+                </div>
+
                 <div id="logout-button-container">
                     <form action="/logout?_method=DELETE" method="POST">
                         <button type="submit">Log Out</button>
                     </form>
                 </div>
-                <!--
-    <h2>Upload recording here:</h2>
-    <form method="post" action="/save-image" enctype="multipart/form-data">
-        <input type="file" name="audio" />
-        <button>Submit</button>
 
-    <h2>Transcribed files</h2>
-    <button id="display-files-button">Display Files</button>
-    
-   </form method="post" action="/save-image" enctype="multipart/form-data">
-    --><img />
+                <img />
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
                 <script src="script.js"></script>
             </body>

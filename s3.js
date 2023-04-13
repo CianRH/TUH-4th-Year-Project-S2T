@@ -171,8 +171,11 @@ const upload = multer({
       const currentDate = new Date()
       const newDate = `${currentDate.getDate()}_${currentDate.getMonth() + 1}_${currentDate.getFullYear()}`
       const newTime = `${currentDate.getHours()}_${currentDate.getMinutes()}_${currentDate.getSeconds()}`
+      const originalName = file.originalname;
+      const urgentPrefix = originalName.includes("URGENT") ? "URGENT_" : "";
+      
       //cb(null, `${sessionStorage.getItem("nameOutput")}-${sessionStorage.getItem("numOutput")}-${Date.now().toString()}`)
-      cb(null, `${req.user.name}-${newDate}_${newTime}`)
+      cb(null, `${urgentPrefix}${req.user.name}-${newDate}_${newTime}`)
     }
     // ,acl: "public-read",
   })
