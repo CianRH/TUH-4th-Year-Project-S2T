@@ -1,0 +1,21 @@
+import boto3
+
+s3 = boto3.client('s3')
+
+def lambda_handler(event, context):
+    source_bucket = event['Records'][0]['s3']['bucket']['name']
+    source_key = event['Records'][0]['s3']['object']['key']
+    output_bucket = 'output_bucket'
+    output_key = 'output_folder/{}'.format(source_key.split('/')[-1])
+    
+    response = s3.get_object(Bucket=source_bucket, Key=source_key)
+    content = response['Body'].read().decode('utf-8')
+    
+    new_content = content.replace('Next case', '\n\nNext case')
+    
+    s3.put_object(Bucket=output_bucket, Key=output_key, Body=new_content.encode('utf-8'))
+    
+    return {
+        'statusCode': 200,
+        'body': 'Text file processed successfully'
+    }
