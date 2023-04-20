@@ -188,7 +188,7 @@ app.post("/save-image", checkAuthenticated, upload.single("audio"), (req, res) =
 app.get("/list-bucket", (req, res) => {
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME_OUTPUT,
-    Prefix: "output/",
+    Prefix: "output_modif/",
   };
   s3.listObjectsV2(params, function (err, data) {
     if (err) {
@@ -196,7 +196,7 @@ app.get("/list-bucket", (req, res) => {
       res.status(500).send("An error occurred while listing files in the bucket.");
     } else {
       const files = data.Contents.map((object) => {
-        const key = object.Key.replace("output/", "");
+        const key = object.Key.replace("output_modif/", "");
         const url = s3.getSignedUrl('getObject', { Bucket: params.Bucket, Key: object.Key });
         return { key, url };
       });
@@ -209,7 +209,7 @@ app.get("/get-file-content", (req, res) => {
   const key = req.query.key;
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME_OUTPUT,
-    Key: `output/${key}`
+    Key: `output_modif/${key}`
   };
   s3.getObject(params, function (err, data) {
     if (err) {
@@ -225,7 +225,7 @@ app.get("/search-bucket", (req, res) => {
   const keyword = req.query.keyword.toLowerCase();
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME_OUTPUT,
-    Prefix: "output/",
+    Prefix: "output_modif/",
   };
   s3.listObjectsV2(params, function (err, data) {
     if (err) {
@@ -233,10 +233,10 @@ app.get("/search-bucket", (req, res) => {
       res.status(500).send("An error occurred  searching files.");
     } else {
       const files = data.Contents.filter((object) => {
-        const key = object.Key.replace("output/", "").toLowerCase();
+        const key = object.Key.replace("output_modif/", "").toLowerCase();
         return key.includes(keyword);
       }).map((object) => {
-        const key = object.Key.replace("output/", "");
+        const key = object.Key.replace("output_modif/", "");
         const url = s3.getSignedUrl('getObject', { Bucket: params.Bucket, Key: object.Key });
         return { key, url };
       });
@@ -271,7 +271,7 @@ app.post("/save-edited-content", express.urlencoded({ extended: true }), (req, r
 
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME_OUTPUT,
-    Key: `output/${key}`,
+    Key: `output_modif/${key}`,
     Body: content,
   };
 
