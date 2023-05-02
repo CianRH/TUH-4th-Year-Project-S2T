@@ -18,6 +18,17 @@ let nameInput = document.querySelector("#name-input");
 let numberInput = document.querySelector("#number-input");
 let form = document.querySelector("#my-form");
 
+function setAudioSource(fileKey) {
+    fetch(`/get-audio?key=${encodeURIComponent(fileKey.replace('.txt', ''))}`)
+    .then((response) => response.blob())
+    .then((blob) => {
+      let audioURL = URL.createObjectURL(blob);
+      let audioPlayer = document.getElementById("audio-player");
+      audioPlayer.src = audioURL;
+    })
+    .catch((error) => console.log(error));
+}
+
 if (searchButton){
     searchButton.addEventListener("click", function () {
         const keyword = searchInput.value.trim().toLowerCase();
@@ -48,6 +59,8 @@ if (searchButton){
                         if (previousActiveRow) {
                             previousActiveRow.classList.remove("active");
                         }
+
+                        setAudioSource(file.key)
                         
                         listItem.classList.add("active");
                         fetch(`/get-file-content?key=${encodeURIComponent(file.key)}`)
